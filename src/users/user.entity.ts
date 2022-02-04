@@ -1,4 +1,5 @@
 import { AfterInsert, AfterUpdate, AfterRemove, Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User{
@@ -10,6 +11,9 @@ export class User{
     email: string;
 
     @Column()
+  /* //not a good approach
+   @Exclude() //exclude this column when converting user entity into json whenever get is requested
+  */ 
     password: string;
 
     @AfterInsert() //this is a hook
