@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Patch, Delete, Param, Query, NotFoundException, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, Body, Get, Patch, Delete, Param, Query, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
@@ -6,6 +6,7 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 
 @Controller('auth')
+@Serialize(UserDto)
 export class UsersController {
 
     constructor(private usersService: UsersService) {}
@@ -16,7 +17,7 @@ export class UsersController {
         this.usersService.create(body.email, body.password);
     }
 
-    @Serialize(UserDto)
+    
     //@UseInterceptors(ClassSerializerInterceptor) //Bad approach
     @Get('/:id')
     async findUser(@Param('id') id: string) { //we always get id as string from param so we need to parse into int when dealing with it
