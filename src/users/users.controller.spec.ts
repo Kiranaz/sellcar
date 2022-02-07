@@ -30,7 +30,9 @@ describe('UsersController', () => {
     };
     fakeAuthService = {
       // signup: () => {},
-      // signin: () => {},
+      signin: (email: string, password: string) => {
+        return Promise.resolve({ id: 1, email, password } as User);
+      },
     };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
@@ -55,7 +57,6 @@ describe('UsersController', () => {
 
   it('findAllUsers returns a list of users with the given email', async () => {
     const users = await controller.findAllUsers('asdf@asdf.com');
-    console.log(users)
     expect(users.length).toEqual(1);
     expect(users[0].email).toEqual('asdf@asdf.com');
   });
@@ -73,6 +74,17 @@ describe('UsersController', () => {
       expect(err).toBeInstanceOf(NotFoundException)
       expect(err.message).toBe('User not found.')
     }
+  });
+
+  it('signin updates session object and returns user', async () => {
+    const session = { userId: -10 }; //assigning with any random number however hardcoded with 1 above.
+    const user = await controller.signin(
+      { email: 'asdf@asdf.com', password: 'asdf' },
+      session,
+    );
+
+    expect(user.id).toEqual(1);
+    expect(session.userId).toEqual(1);
   });
 
 });
