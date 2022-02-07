@@ -43,7 +43,7 @@ describe('AuthService', () => {
 
       it('throws an error when signin error when user exists', async () => {
         fakeUsersService.find = () => Promise.resolve([ {id: 1, email:'asdf@asdf.com', password: '1'} as User]);
-        expect.assertions(2);
+        expect.assertions(2); //The expect.assertions(2) call ensures that both callbacks actually get called.
         try {
           await service.signup('kiran@gmail.com', 'pwd123');
         } catch (err) {
@@ -60,4 +60,33 @@ describe('AuthService', () => {
             expect(err.message).toBe('User not found.');
         }
       });
+
+      it('throws if an invalid password is provided', async () => {
+        fakeUsersService.find = () => Promise.resolve([ {id: 1, email:'asdf@asdf.com', password: '1'} as User]);
+        expect.assertions(2);
+        try {
+          await service.signup('kiran@gmail.com', 'pwdsdsadsadas123');
+        } catch (err) {
+            expect(err).toBeInstanceOf(BadRequestException);
+            expect(err.message).toBe('Email already exists.');
+        }
+      });
+    
+      it('returns a user if correct password is provided', async () => {
+        fakeUsersService.find = () =>
+          Promise.resolve([
+            {
+              email: 'asdf@asdf.com',
+              password:
+                'bdaef91e25cc3a12.c8ee6407d0a981616c3b93adabbcaa824befe397da0fda03ad763680e1725994',
+            } as User,
+          ]);
+    
+        const user = await service.signin('asdf@asdf.com', 'mypassword');
+        expect(user).toBeDefined();
+
+        // const user = await service.signup('asdf@asdf.com', 'mypassword');
+        // console.log(user)
+      });
+    
 })
