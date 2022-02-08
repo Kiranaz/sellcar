@@ -1,5 +1,6 @@
-import { AfterInsert, AfterUpdate, AfterRemove, Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import { AfterInsert, AfterUpdate, AfterRemove, Column, Entity, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Report } from 'src/reports/report.entity';
 
 @Entity()
 export class User{
@@ -15,6 +16,9 @@ export class User{
    @Exclude() //exclude this column when converting user entity into json whenever get is requested
   */ 
     password: string;
+
+    @OneToMany(() => Report, (report) => report.user)
+    reports: Report[];
 
     @AfterInsert() //this is a hook
     logInsert() {
