@@ -28,6 +28,7 @@ export class Report{
     @Column()
     ltd: number;
 
-    @ManyToOne(() => User, (user) => user.reports)
+    @ManyToOne(() => User, (user) => user.reports) //after comma clause ----> if we ever get an instance of a user, 
+    //so if we fetch user out of the database or something like that, we can get an access to all the different reports tied to this user
     user: User;
 }
