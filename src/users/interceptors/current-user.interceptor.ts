@@ -15,11 +15,11 @@ export class CurrentUserInterceptor implements NestInterceptor{
         const { userId } = request.session || {};
 
         if(userId) {
-            const user = await this.usersService.findOne(userId); //go ahead and run the actual root handler
+            const user = await this.usersService.findOne(userId);
             request.CurrentUser = user;
         }
     
-        return next.handle();
+        return next.handle(); //go ahead and run the actual root handler
     }
     
 }
