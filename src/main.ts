@@ -12,7 +12,7 @@ async function bootstrap() {
   //   new ValidationPipe({
   //     whitelist: true
   //   })
-  )
+ // )
   await app.listen(3000);
 }
 bootstrap();
