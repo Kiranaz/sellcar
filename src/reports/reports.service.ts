@@ -10,10 +10,25 @@ import { Report } from './report.entity';
 export class ReportsService {
     constructor(@InjectRepository(Report) private repo: Repository<Report>) { }
 
-    createEstimate(estimateDto: GetEstimateDto){
-        return this.repo.createQueryBuilder().select('*')
-        .where('make =: make', {make: estimateDto.make})
-        .getRawMany();
+    // createEstimate(estimateDto: GetEstimateDto){
+    //     return this.repo.createQueryBuilder().select('*')
+    //     .where('make =: make', {make: estimateDto.make})
+    //     .getRawMany();
+    // }
+
+    createEstimate({make, model, lng, ltd, year, mileage}: GetEstimateDto){
+        return this.repo.createQueryBuilder()
+        .select('AVG(price)', 'price')
+        .where('make =: make', {make})
+        .andWhere('model =: model', {model})
+        .andWhere('lng -: lng BETWEEN -5 AND 5', {lng})
+        .andWhere('ltd -: ltd BETWEEN -5 AND 5', {ltd})
+        .andWhere('year -: year BETWEEN -3 AND 3', {year})
+        .andWhere('approved IS TRUE')
+        .orderBy('ABS(mileage -: mileage)', 'DESC')
+        .setParameters({mileage})
+        .limit(3)
+        .getRawOne();
     }
     
     create(reportDto: CreateReportDto, user: User) {
