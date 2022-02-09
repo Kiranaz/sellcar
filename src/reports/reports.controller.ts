@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
@@ -6,6 +6,7 @@ import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/user.entity';
 import { ApproveReportDto } from './dtos/approve-report.dto';
 import { CreateReportDto } from './dtos/create-report.dto';
+import { GetEstimateDto } from './dtos/get-estimate.dto';
 import { ReportDto } from './dtos/report.dto';
 import { ReportsService } from './reports.service';
 
@@ -13,6 +14,11 @@ import { ReportsService } from './reports.service';
 export class ReportsController {
     constructor(private reportsService: ReportsService) {}
 
+    @Get()
+    getEstimate(@Query() query: GetEstimateDto) {
+      return console.log(query);
+    }
+    
     @Post()
     @UseGuards(AuthGuard) //so that only authenticated user can access this route
     @Serialize(ReportDto)
