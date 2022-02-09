@@ -33,5 +33,5 @@ export class GetEstimateDto {
 
   @Transform(({ value }) => parseFloat(value))
   @IsLatitude()
-  lat: number;
+  ltd: number;
 }
